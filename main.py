@@ -29,26 +29,28 @@ class Window(QWidget, Ui_Form):
         self.originImgFigure = ImgFigure(dpi=100)
         self.enhancedImgFigure = ImgFigure(dpi=100)
 
+        self.originImgFigure.axes.get_yaxis().set_visible(False)
+        self.originImgFigure.axes.get_xaxis().set_visible(False)
+        self.gridlayout1 = QGridLayout(self.origin_group)
+        self.gridlayout1.addWidget(self.originImgFigure)
+
+        self.enhancedImgFigure.axes.get_yaxis().set_visible(False)
+        self.enhancedImgFigure.axes.get_xaxis().set_visible(False)
+        self.gridlayout2 = QGridLayout(self.enhanced_group)
+        self.gridlayout2.addWidget(self.enhancedImgFigure)
+
     def loadImg(self):
         imgPath = QFileDialog.getOpenFileName(
             self, "请选择图片", "./data", "All Files (*)")[0]
 
         self.originImg = io.imread(imgPath)
         self.originImgFigure.axes.imshow(self.originImg)
-        self.originImgFigure.axes.get_yaxis().set_visible(False)
-        self.originImgFigure.axes.get_xaxis().set_visible(False)
-
-        self.gridlayout1 = QGridLayout(self.origin_group)
-        self.gridlayout1.addWidget(self.originImgFigure)
+        self.originImgFigure.draw()
 
     def enhanceImg(self):
         lime = LIME(self.originImg)
         self.enhancedImgFigure.axes.imshow(lime.enhance())
-        self.enhancedImgFigure.axes.get_yaxis().set_visible(False)
-        self.enhancedImgFigure.axes.get_xaxis().set_visible(False)
-
-        self.gridlayout2 = QGridLayout(self.enhanced_group)
-        self.gridlayout2.addWidget(self.enhancedImgFigure)
+        self.enhancedImgFigure.draw()
 
 
 if __name__ == '__main__':
