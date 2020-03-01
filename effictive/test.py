@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 class LIME:
-    def __init__(self, srcPath, alpha=0.9, rho=2):
+    def __init__(self, srcPath, alpha=0.1, rho=2):
         self.L = img_as_float(io.imread(srcPath))
         # np.random.seed(3)
         # self.L = np.random.randint(0, 30, (2, 3, 3))
@@ -50,17 +50,30 @@ class LIME:
         t = 0
         u = 1
         self.__weightingStrategy()
-        threshold = np.linalg.norm(self.T_hat, ord='fro') * 0.00001
+        threshold = np.linalg.norm(self.T_hat, ord='fro') * 0.01
 
-        while (np.linalg.norm((self.__derivativeOfT(T) - G), ord='fro') <= threshold) and t < 20:
-            input("--->")
+        T = self.__T_subproblem(G, Z, u)
+        T = exposure.rescale_intensity(T, (0, 1), (0.0001, 1))
+        io.imsave('C:/Source/LIME/data/T'+str(t)+'.bmp', img_as_ubyte(T**0.5))
+        G = self.__G_subproblem(T, Z, u, self.W)
+        Z = self.__Z_subproblem(T, G, Z, u)
+        u = self.__u_subprobelm(u)
+        thr = np.linalg.norm((self.__derivativeOfT(T) - G), ord='fro')
+        t += 1
+
+        while thr > threshold:
             T = self.__T_subproblem(G, Z, u)
+            T = exposure.rescale_intensity(T, (0, 1), (0.0001, 1))
+            io.imsave('C:/Source/LIME/data/T'+str(t) +
+                      '.bmp', img_as_ubyte(T**0.5))
             G = self.__G_subproblem(T, Z, u, self.W)
             Z = self.__Z_subproblem(T, G, Z, u)
             u = self.__u_subprobelm(u)
-            print("     第{:d}次循环结束".format(t))
+            thr = np.linalg.norm((self.__derivativeOfT(T) - G), ord='fro')
+            print("第{:d}次循环结束,最小T值为{:f},最大T值为{:f},thr={:f}".format(
+                t, T.min(), T.max(), thr))
             t += 1
-        self.T = T
+        self.T = T**0.5
         return self.T
 
     def __T_subproblem(self, G, Z, u):
@@ -70,14 +83,8 @@ class LIME:
         temp2 = self.d_v @ (temp1[:self.row, :]) + \
             (temp1[self.row:, :]) @ self.d_h
         numerator = sp.fft.fft((self.T_hat + u * temp2).T.ravel())
-        T = sp.fft.ifft(denominator / numerator)
+        T = sp.fft.ifft(numerator / denominator)
         return np.real(self.__stack(T))
-
-    def __ravel(self, matrix):
-        # 按列展开
-        v = matrix[:self.row, :self.col].T.ravel()
-        h = matrix[self.row:, :self.col].T.ravel()
-        return np.hstack([v, h])
 
     def __stack(self, vector):
         return vector.reshape((self.row, self.col), order='F')
@@ -86,7 +93,8 @@ class LIME:
         # T(t+1) Z(t) u(t)
         dT = self.__derivativeOfT(T)
         epsilon = self.alpha * W / u
-        return np.sign(np.maximum(np.abs(dT + Z / u) - epsilon, 0))
+        X = dT + Z / u
+        return np.sign(X) * np.maximum(np.abs(X) - epsilon, 0)
 
     def __derivativeOfT(self, matrix):
         v = self.d_v @ matrix
@@ -104,13 +112,8 @@ class LIME:
     def __weightingStrategy(self):
         self.W = np.ones((self.row * 2, self.col))
 
-    def test(self):
-        pass
-
     def enhance(self, nameta=0.9):
         tem = self.optimizeIllumMap()
-        io.imsave('./T.jpg', img_as_ubyte(tem))
-        print(np.max(tem))
         self.R = np.zeros(self.L.shape)
         for i in range(3):
             self.R[:, :, i] = 1 - \
@@ -121,5 +124,6 @@ class LIME:
 
 
 if __name__ == "__main__":
-    lime = LIME("C:/Source/LIME/effictive/3.bmp")
-    io.imsave('./R.jpg', lime.enhance())
+    lime = LIME("C:/Source/LIME/data/3.bmp")
+    # lime.enhance()
+    io.imsave('C:/Source/LIME/data/R.bmp', lime.enhance())
