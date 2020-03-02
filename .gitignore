@@ -1,3 +1,5 @@
 __pycache__
 DEMO/
 mainwindow.ui
+.vscode/
+old.py

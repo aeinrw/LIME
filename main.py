@@ -40,15 +40,15 @@ class Window(QWidget, Ui_Form):
         self.gridlayout2.addWidget(self.enhancedImgFigure)
 
     def loadImg(self):
-        imgPath = QFileDialog.getOpenFileName(
+        self.imgPath = QFileDialog.getOpenFileName(
             self, "请选择图片", "./data", "All Files (*)")[0]
 
-        self.originImg = io.imread(imgPath)
+        self.originImg = io.imread(self.imgPath)
         self.originImgFigure.axes.imshow(self.originImg)
         self.originImgFigure.draw()
 
     def enhanceImg(self):
-        lime = LIME(self.originImg)
+        lime = LIME(self.imgPath)
         self.enhancedImgFigure.axes.imshow(lime.enhance())
         self.enhancedImgFigure.draw()
 
