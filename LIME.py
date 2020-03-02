@@ -74,11 +74,18 @@ class LIME:
     def __u_subproblem(self, u):
         return u * self.rho
 
-    def __weightingStrategy(self):
+    def __weightingStrategy_1(self):
         self.W = np.ones((self.row * 2, self.col))
 
+    def __weightingStrategy_2(self):
+        dTv = self.dv @ self.T_hat
+        dTh = self.T_hat @ self.dh
+        Wv = 1 / (np.abs(dTv) + 1)
+        Wh = 1 / (np.abs(dTh) + 1)
+        self.W = np.vstack([Wv, Wh])
+
     def optimizeIllumMap(self):
-        self.__weightingStrategy()
+        self.__weightingStrategy_2()
 
         T = np.zeros((self.row, self.col))
         G = np.zeros((self.row * 2, self.col))
@@ -89,8 +96,6 @@ class LIME:
 
         while True:
             T = self.__T_subproblem(G, Z, u)
-            # io.imsave('C:/Source/LIME/data/T' + str(t) +
-            #           '.bmp', img_as_ubyte(T ** self.gamma))
             G = self.__G_subproblem(T, Z, u, self.W)
             Z = self.__Z_subproblem(T, G, Z, u)
             u = self.__u_subproblem(u)
@@ -107,8 +112,7 @@ class LIME:
         self.optimizeIllumMap()
         self.R = np.zeros(self.L.shape)
         for i in range(3):
-            self.R[:, :, i] = 1 - \
-                ((1 - self.L[:, :, i]) - (beta * (1 - self.T))) / self.T
+            self.R[:, :, i] = self.L[:, :, i] / self.T
         self.R = exposure.rescale_intensity(self.R, (0, 1))
         self.R = img_as_ubyte(self.R)
         return self.R

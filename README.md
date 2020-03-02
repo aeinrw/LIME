@@ -9,18 +9,18 @@ This is a python version of low-light image enhancement, which is for my graduat
 ## Example
 
 <table>
-<tr>
-    <img src="data/1.bmp" alt="1" width="300px"/>
-    <img src="data/R1.bmp" alt="1" width="300px"/>
-</tr>
-<tr>
-	<img src="data/7.bmp" alt="1" width="300px"/>
-	<img src="data/R7.bmp" alt="1" width="300px"/>
-</tr>
-<tr>
-	<img src="data/10.bmp" alt="1" width="300px"/>
-	<img src="data/R10.bmp" alt="1" width="300px"/>
-</tr>
+	<tr>
+    	<td><img src="data/1.bmp" alt="1" width="300px"/></td>
+    	<td><img src="data/R1.bmp" alt="1" width="300px"/></td>
+	</tr>
+	<tr>
+		<td><img src="data/7.bmp" alt="1" width="300px"/></td>
+		<td><img src="data/R7.bmp" alt="1" width="300px"/></td>
+	</tr>
+	<tr>
+		<td><img src="data/10.bmp" alt="1" width="300px"/></td>
+		<td><img src="data/R10.bmp" alt="1" width="300px"/></td>
+	</tr>
 </table>
 
 ## Introduce
