@@ -4,9 +4,18 @@ from scipy.fft import fft, ifft
 from numpy.linalg import norm
 from skimage import io, exposure, filters, img_as_ubyte, img_as_float
 
+import time
 
-class LIME:
-    def __init__(self, srcPath, alpha=0.1, rho=2, gamma=0.7):
+
+class LIME(object):
+    '''
+    This class is used to enhance low-light picture.
+
+    Args:
+      srcPath (str): the path of picture.
+    '''
+
+    def __init__(self, srcPath, GUI=None, alpha=0.1, rho=2, gamma=0.7):
         self.L = img_as_float(io.imread(srcPath))
         self.row = self.L.shape[0]
         self.col = self.L.shape[1]
@@ -15,17 +24,28 @@ class LIME:
         self.rho = rho
         self.gamma = gamma
 
-        self.__initIllumMap()
         self.__toeplitzMatrix()
+        self.__initIllumMap()
 
     def __initIllumMap(self):
+        '''
+        Generate initial illumination map
+
+        Returns:
+          martix: initial illumination map with same shape of original picture.
+        '''
         r = self.L[:, :, 0]
         g = self.L[:, :, 1]
         b = self.L[:, :, 2]
         self.T_hat = np.maximum(np.maximum(r, g), b)
+        self.epsilon = norm(self.T_hat, ord='fro') * 0.001
+
         return self.T_hat
 
     def __toeplitzMatrix(self):
+        '''
+        Generate toeplitz matrix, which is used in subproblem of T.
+        '''
         self.dv = self.__firstOrderDerivative(self.row)
         self.dh = self.__firstOrderDerivative(self.col, -1)
         vecDD = np.zeros(self.row * self.col)
@@ -37,9 +57,30 @@ class LIME:
         self.vecDD = vecDD
 
     def __firstOrderDerivative(self, n, k=1):
+        '''
+        Generate first order derivative matrix.
+
+        Args:
+          n (int): the shape of matrix.
+          k (int): offset.
+
+        Returns:
+          matrix: first order derivative matrix.
+        '''
         return (np.eye(n)) * (-1) + np.eye(n, k=k)
 
     def __T_subproblem(self, G, Z, u):
+        '''
+        To solve subproblem of T.
+
+        Args:
+          G (matrix): G(t)
+          Z (matrix): Z(t)
+          u (float): u(t)
+
+        Returns:
+          (matrix): T(t+1)
+        '''
         X = G - Z / u
         Xv = X[:self.row, :]
         Xh = X[self.row:, :]
@@ -51,6 +92,9 @@ class LIME:
         return exposure.rescale_intensity(T, (0, 1), (0.0001, 1))
 
     def __vectorize(self, matrix):
+        '''
+        Vectorize matrix
+        '''
         return matrix.T.ravel()
 
     def __reshape(self, vector):
@@ -84,7 +128,7 @@ class LIME:
         Wh = 1 / (np.abs(dTh) + 1)
         self.W = np.vstack([Wv, Wh])
 
-    def optimizeIllumMap(self):
+    def optimizeIllumMap(self, progressbar=None):
         self.__weightingStrategy_2()
 
         T = np.zeros((self.row, self.col))
@@ -92,24 +136,32 @@ class LIME:
         Z = np.zeros((self.row * 2, self.col))
         t = 0
         u = 1
-        threshold = norm(self.T_hat, ord='fro') * 0.001
 
         while True:
             T = self.__T_subproblem(G, Z, u)
             G = self.__G_subproblem(T, Z, u, self.W)
             Z = self.__Z_subproblem(T, G, Z, u)
             u = self.__u_subproblem(u)
-            thr = norm((self.__derivative(T) - G), ord='fro')
-            print("第{:d}次迭代结束,thr={:f}".format(t, thr))
+            temp = norm((self.__derivative(T) - G), ord='fro')
+
+            if t == 0:
+                self.expert_t = np.ceil(2 * np.log(temp / self.epsilon))
+                # print("预计迭代次数:", self.expert_t)
+                progressbar.setMaximum(self.expert_t)
+
             t += 1
-            if thr < threshold:
+            # print("第{:d}次迭代结束,norm={:.3f}".format(t, temp))
+            # print(t)
+            progressbar.setValue(t)
+
+            if t >= self.expert_t:
                 break
 
         self.T = T ** self.gamma
         return self.T
 
     def enhance(self, beta=0.9):
-        self.optimizeIllumMap()
+
         self.R = np.zeros(self.L.shape)
         for i in range(3):
             self.R[:, :, i] = self.L[:, :, i] / self.T
@@ -119,6 +171,7 @@ class LIME:
 
 
 if __name__ == "__main__":
-    lime = LIME("C:/Source/LIME/data/10.bmp")
+    lime = LIME("C:/Source/LIME/data/5.bmp")
+    lime.optimizeIllumMap()
     lime.enhance()
-    io.imsave("C:/Source/LIME/data/R.bmp", lime.R)
+    # io.imsave("C:/Source/LIME/data/R.jpg", lime.R)

@@ -6,7 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import sys
 import numpy as np
-from Ui_mainwindow import Ui_Form
+from Ui_window import Ui_MainWindow
 from skimage import io
 from LIME import LIME
 
@@ -21,7 +21,7 @@ class ImgFigure(FigureCanvas):
         self.axes = self.fig.add_subplot(111)
 
 
-class Window(QWidget, Ui_Form):
+class Window(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(Window, self).__init__()
         self.setupUi(self)
@@ -31,13 +31,15 @@ class Window(QWidget, Ui_Form):
 
         self.originImgFigure.axes.get_yaxis().set_visible(False)
         self.originImgFigure.axes.get_xaxis().set_visible(False)
-        self.gridlayout1 = QGridLayout(self.origin_group)
+        self.gridlayout1 = QGridLayout(self.origin_gb)
         self.gridlayout1.addWidget(self.originImgFigure)
 
         self.enhancedImgFigure.axes.get_yaxis().set_visible(False)
         self.enhancedImgFigure.axes.get_xaxis().set_visible(False)
-        self.gridlayout2 = QGridLayout(self.enhanced_group)
+        self.gridlayout2 = QGridLayout(self.enhanced_gb)
         self.gridlayout2.addWidget(self.enhancedImgFigure)
+
+        self.statusBar.showMessage("请选择文件.")
 
     def loadImg(self):
         self.imgPath = QFileDialog.getOpenFileName(
@@ -46,11 +48,27 @@ class Window(QWidget, Ui_Form):
         self.originImg = io.imread(self.imgPath)
         self.originImgFigure.axes.imshow(self.originImg)
         self.originImgFigure.draw()
+        self.statusBar.showMessage("当前图片路径: "+self.imgPath)
+
+        self.enhance_btn.setEnabled(True)
+        self.save_btn.setEnabled(False)
 
     def enhanceImg(self):
         lime = LIME(self.imgPath)
-        self.enhancedImgFigure.axes.imshow(lime.enhance())
+        lime.optimizeIllumMap(self.progressBar)
+        self.result = lime.enhance()
+        self.enhancedImgFigure.axes.imshow(self.result)
         self.enhancedImgFigure.draw()
+        self.statusBar.showMessage("当前图片路径: "+self.imgPath+"   图像增强成功")
+
+        self.enhance_btn.setEnabled(False)
+        self.save_btn.setEnabled(True)
+
+    def saveImg(self):
+        savePath = QFileDialog.getSaveFileName(
+            self, "请选择保存位置", "./data", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
+        if savePath != '':
+            io.imsave(savePath, self.result)
 
 
 if __name__ == '__main__':
@@ -58,4 +76,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Window()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
