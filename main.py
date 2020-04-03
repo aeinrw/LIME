@@ -31,13 +31,12 @@ class Window(QMainWindow, Ui_MainWindow):
 
         self.originImgFigure.axes.get_yaxis().set_visible(False)
         self.originImgFigure.axes.get_xaxis().set_visible(False)
-        self.gridlayout1 = QGridLayout(self.origin_gb)
-        self.gridlayout1.addWidget(self.originImgFigure)
-
         self.enhancedImgFigure.axes.get_yaxis().set_visible(False)
         self.enhancedImgFigure.axes.get_xaxis().set_visible(False)
-        self.gridlayout2 = QGridLayout(self.enhanced_gb)
-        self.gridlayout2.addWidget(self.enhancedImgFigure)
+
+        self.layout = QHBoxLayout(self.groupbox)
+        self.layout.addWidget(self.originImgFigure)
+        self.layout.addWidget(self.enhancedImgFigure)
 
         self.statusBar.showMessage("请选择文件.")
 
@@ -45,13 +44,14 @@ class Window(QMainWindow, Ui_MainWindow):
         self.imgPath = QFileDialog.getOpenFileName(
             self, "请选择图片", "./data", "All Files (*)")[0]
 
-        self.originImg = io.imread(self.imgPath)
-        self.originImgFigure.axes.imshow(self.originImg)
-        self.originImgFigure.draw()
-        self.statusBar.showMessage("当前图片路径: "+self.imgPath)
+        if self.imgPath != '':
+            self.originImg = io.imread(self.imgPath)
+            self.originImgFigure.axes.imshow(self.originImg)
+            self.originImgFigure.draw()
+            self.statusBar.showMessage("当前图片路径: "+self.imgPath)
 
-        self.enhance_btn.setEnabled(True)
-        self.save_btn.setEnabled(False)
+            self.enhance_btn.setEnabled(True)
+            self.save_btn.setEnabled(False)
 
     def enhanceImg(self):
         lime = LIME(self.imgPath)

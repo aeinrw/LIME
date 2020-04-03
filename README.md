@@ -2,6 +2,8 @@
 
 This is a python version of low-light image enhancement, which is for my graduation thesis.
 
+If you think this is useful and interesting, please give me a **star**!😁
+
 ## Related Publications
 
 * Guo, X, Li Y, Ling H. LIME: Low-Light Image Enhancement via Illumination Map Estimation. *IEEE Transactions on Image Processing* **2017**, *26* (2), 982–993. https://doi.org/10.1109/TIP.2016.2639450.
@@ -27,7 +29,5 @@ This is a python version of low-light image enhancement, which is for my graduat
 
 `LIME.py` is main procedure.
 
-`simplyLIME.py` is a simply python version , which refers  [C++ version](https://github.com/zj611/LIME_Processing)
-
-`main.py` and `Ui_mainwindow.py` are used to draw GUI.
+`main.py` and `Ui_window.py` are used to draw GUI.
 

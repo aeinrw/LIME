@@ -142,9 +142,9 @@ class LIME(object):
             G = self.__G_subproblem(T, Z, u, self.W)
             Z = self.__Z_subproblem(T, G, Z, u)
             u = self.__u_subproblem(u)
-            temp = norm((self.__derivative(T) - G), ord='fro')
 
             if t == 0:
+                temp = norm((self.__derivative(T) - G), ord='fro')
                 self.expert_t = np.ceil(2 * np.log(temp / self.epsilon))
                 # print("预计迭代次数:", self.expert_t)
                 progressbar.setMaximum(self.expert_t)
