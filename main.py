@@ -1,24 +1,37 @@
-import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import sys
 import numpy as np
 from Ui_window import Ui_MainWindow
 from skimage import io
-from LIME import LIME
-
-import matplotlib
-matplotlib.use("Qt5Agg")
 
 
 class ImgFigure(FigureCanvas):
     def __init__(self, dpi=100):
         self.fig = Figure(dpi=dpi)
         super(ImgFigure, self).__init__(self.fig)
-        self.axes = self.fig.add_subplot(111)
+        self.axes1 = self.fig.add_subplot(121)
+        self.axes2 = self.fig.add_subplot(122)
+
+
+class WorkThread(QThread):
+
+    finishSignal = pyqtSignal(np.ndarray)
+
+    def __init__(self, imgPath, progressBar):
+        super(WorkThread, self).__init__()
+
+        from LIME import LIME
+        self.lime = LIME(imgPath)
+        self.lime.setMaximumSignal.connect(progressBar.setMaximum)
+        self.lime.setValueSignal.connect(progressBar.setValue)
+
+    def run(self):
+        self.lime.optimizeIllumMap()
+        result = self.lime.enhance()
+        self.finishSignal.emit(result)
 
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -26,45 +39,48 @@ class Window(QMainWindow, Ui_MainWindow):
         super(Window, self).__init__()
         self.setupUi(self)
 
-        self.originImgFigure = ImgFigure(dpi=100)
-        self.enhancedImgFigure = ImgFigure(dpi=100)
+        self.imgFigure = ImgFigure()
 
-        self.originImgFigure.axes.get_yaxis().set_visible(False)
-        self.originImgFigure.axes.get_xaxis().set_visible(False)
-        self.enhancedImgFigure.axes.get_yaxis().set_visible(False)
-        self.enhancedImgFigure.axes.get_xaxis().set_visible(False)
+        self.imgFigure.axes1.get_yaxis().set_visible(False)
+        self.imgFigure.axes1.get_xaxis().set_visible(False)
+        self.imgFigure.axes2.get_yaxis().set_visible(False)
+        self.imgFigure.axes2.get_xaxis().set_visible(False)
 
         self.layout = QHBoxLayout(self.groupbox)
-        self.layout.addWidget(self.originImgFigure)
-        self.layout.addWidget(self.enhancedImgFigure)
+        self.layout.addWidget(self.imgFigure)
 
-        self.statusBar.showMessage("请选择文件.")
+        self.statusBar.showMessage("请选择文件")
 
-    def loadImg(self):
+    @pyqtSlot()
+    def on_loadBtn_clicked(self):
         self.imgPath = QFileDialog.getOpenFileName(
             self, "请选择图片", "./data", "All Files (*)")[0]
 
         if self.imgPath != '':
-            self.originImg = io.imread(self.imgPath)
-            self.originImgFigure.axes.imshow(self.originImg)
-            self.originImgFigure.draw()
+            originImg = io.imread(self.imgPath)
+            self.imgFigure.axes1.imshow(originImg)
+            self.imgFigure.draw()
             self.statusBar.showMessage("当前图片路径: "+self.imgPath)
 
-            self.enhance_btn.setEnabled(True)
-            self.save_btn.setEnabled(False)
+            self.enhanceBtn.setEnabled(True)
+            self.saveBtn.setEnabled(False)
 
-    def enhanceImg(self):
-        lime = LIME(self.imgPath)
-        lime.optimizeIllumMap(self.progressBar)
-        self.result = lime.enhance()
-        self.enhancedImgFigure.axes.imshow(self.result)
-        self.enhancedImgFigure.draw()
-        self.statusBar.showMessage("当前图片路径: "+self.imgPath+"   图像增强成功")
+    @pyqtSlot()
+    def on_enhanceBtn_clicked(self):
+        self.workThread = WorkThread(self.imgPath, self.progressBar)
+        self.workThread.start()
+        self.workThread.finishSignal.connect(self.on_workThread_finishSignal)
 
-        self.enhance_btn.setEnabled(False)
-        self.save_btn.setEnabled(True)
+    def on_workThread_finishSignal(self, result):
+        self.result = result
+        self.statusBar.showMessage("当前图片路径: " + self.imgPath + "   图像增强成功")
+        self.imgFigure.axes2.imshow(self.result)
+        self.imgFigure.draw()
+        self.enhanceBtn.setEnabled(False)
+        self.saveBtn.setEnabled(True)
 
-    def saveImg(self):
+    @pyqtSlot()
+    def on_saveBtn_clicked(self):
         savePath = QFileDialog.getSaveFileName(
             self, "请选择保存位置", "./data", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
         if savePath != '':

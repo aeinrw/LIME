@@ -38,14 +38,14 @@
        <number>14</number>
       </property>
       <item>
-       <widget class="QPushButton" name="load_btn">
+       <widget class="QPushButton" name="loadBtn">
         <property name="text">
          <string>图片加载</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="enhance_btn">
+       <widget class="QPushButton" name="enhanceBtn">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -55,7 +55,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="save_btn">
+       <widget class="QPushButton" name="saveBtn">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -88,56 +88,7 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>load_btn</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>loadImg()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>31</x>
-     <y>243</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-31</x>
-     <y>281</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>enhance_btn</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>enhanceImg()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>98</x>
-     <y>241</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-66</x>
-     <y>297</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>save_btn</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>saveImg()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>179</x>
-     <y>244</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-8</x>
-     <y>313</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>loadImg()</slot>
   <slot>enhanceImg()</slot>
