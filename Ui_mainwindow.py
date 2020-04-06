@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Source\LIME\window.ui'
+# Form implementation generated from reading ui file 'c:\Source\LIME\mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
 #
@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 750)
+        MainWindow.resize(1100, 700)
         MainWindow.setMinimumSize(QtCore.QSize(1100, 700))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -39,21 +39,46 @@ class Ui_MainWindow(object):
         self.saveBtn.setEnabled(False)
         self.saveBtn.setObjectName("saveBtn")
         self.horizontalLayout.addWidget(self.saveBtn)
-        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setProperty("value", 0)
-        self.progressBar.setObjectName("progressBar")
-        self.horizontalLayout.addWidget(self.progressBar)
         self.verticalLayout.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
         MainWindow.setStatusBar(self.statusBar)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1200, 18))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1100, 18))
         self.menuBar.setObjectName("menuBar")
+        self.menu = QtWidgets.QMenu(self.menuBar)
+        self.menu.setObjectName("menu")
+        self.menu_2 = QtWidgets.QMenu(self.menuBar)
+        self.menu_2.setObjectName("menu_2")
+        self.menu_3 = QtWidgets.QMenu(self.menuBar)
+        self.menu_3.setObjectName("menu_3")
+        self.menu_4 = QtWidgets.QMenu(self.menuBar)
+        self.menu_4.setObjectName("menu_4")
         MainWindow.setMenuBar(self.menuBar)
+        self.saveAct = QtWidgets.QAction(MainWindow)
+        self.saveAct.setObjectName("saveAct")
+        self.loadAct = QtWidgets.QAction(MainWindow)
+        self.loadAct.setObjectName("loadAct")
+        self.aboutAct = QtWidgets.QAction(MainWindow)
+        self.aboutAct.setObjectName("aboutAct")
+        self.action = QtWidgets.QAction(MainWindow)
+        self.action.setObjectName("action")
+        self.action_2 = QtWidgets.QAction(MainWindow)
+        self.action_2.setObjectName("action_2")
+        self.menu.addAction(self.loadAct)
+        self.menu.addAction(self.saveAct)
+        self.menu_2.addAction(self.action)
+        self.menu_3.addAction(self.aboutAct)
+        self.menu_4.addAction(self.action_2)
+        self.menuBar.addAction(self.menu.menuAction())
+        self.menuBar.addAction(self.menu_2.menuAction())
+        self.menuBar.addAction(self.menu_4.menuAction())
+        self.menuBar.addAction(self.menu_3.menuAction())
 
         self.retranslateUi(MainWindow)
+        self.loadAct.triggered.connect(self.loadBtn.click)
+        self.saveAct.triggered.connect(self.saveBtn.click)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -63,3 +88,12 @@ class Ui_MainWindow(object):
         self.loadBtn.setText(_translate("MainWindow", "图片加载"))
         self.enhanceBtn.setText(_translate("MainWindow", "图片增强"))
         self.saveBtn.setText(_translate("MainWindow", "保存图片"))
+        self.menu.setTitle(_translate("MainWindow", "文件"))
+        self.menu_2.setTitle(_translate("MainWindow", "调整"))
+        self.menu_3.setTitle(_translate("MainWindow", "帮助"))
+        self.menu_4.setTitle(_translate("MainWindow", "工具"))
+        self.saveAct.setText(_translate("MainWindow", "保存"))
+        self.loadAct.setText(_translate("MainWindow", "打开"))
+        self.aboutAct.setText(_translate("MainWindow", "关于"))
+        self.action.setText(_translate("MainWindow", "待完成"))
+        self.action_2.setText(_translate("MainWindow", "待完成"))

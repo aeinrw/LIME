@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>750</height>
+    <width>1100</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -64,13 +64,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QProgressBar" name="progressBar">
-        <property name="value">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
@@ -81,14 +74,101 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
+     <width>1100</width>
      <height>18</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="loadAct"/>
+    <addaction name="saveAct"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>调整</string>
+    </property>
+    <addaction name="action"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="aboutAct"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="action_2"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_3"/>
   </widget>
+  <action name="saveAct">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="loadAct">
+   <property name="text">
+    <string>打开</string>
+   </property>
+  </action>
+  <action name="aboutAct">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>待完成</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>待完成</string>
+   </property>
+  </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>loadAct</sender>
+   <signal>triggered()</signal>
+   <receiver>loadBtn</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>513</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveAct</sender>
+   <signal>triggered()</signal>
+   <receiver>saveBtn</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>916</x>
+     <y>513</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>loadImg()</slot>
   <slot>enhanceImg()</slot>
