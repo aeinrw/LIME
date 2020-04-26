@@ -112,7 +112,7 @@ class LIME(QObject):
             if t == 0:
                 temp = norm((self.__derivative(T) - G), ord='fro')
                 self.expert_t = np.ceil(2 * np.log(temp / self.epsilon))
-                self.setMaximumSignal.emit(self.expert_t)
+                self.setMaximumSignal.emit(self.expert_t+1)
 
             t += 1
             self.setValueSignal.emit(t)

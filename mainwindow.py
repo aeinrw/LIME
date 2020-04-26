@@ -77,6 +77,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_enhanceBtn_clicked(self):
+        self.progressBar.setValue(0)
         self.progressBar.setVisible(True)
         self.smoothnessSlider.setEnabled(False)
         self.brightnessSlider.setEnabled(False)
@@ -88,7 +89,6 @@ class Window(QMainWindow, Ui_MainWindow):
         self.workThread.finishSignal.connect(self.on_workThread_finishSignal)
 
     def on_workThread_finishSignal(self, T, R):
-        self.progressBar.setVisible(False)
         self.smoothnessSlider.setEnabled(True)
         self.brightnessSlider.setEnabled(True)
         self.T = T
@@ -96,6 +96,10 @@ class Window(QMainWindow, Ui_MainWindow):
         self.statusBar.showMessage("当前图片路径: " + self.imgPath + "   图像增强成功")
         self.imgFigure.T_axes.imshow(self.T, cmap=plt.get_cmap('OrRd_r'))
         self.imgFigure.R_axes.imshow(self.R)
+
+        self.progressBar.setValue(self.progressBar.maximum())
+        self.progressBar.setVisible(False)
+
         self.imgFigure.draw()
         self.saveBtn.setEnabled(True)
 
