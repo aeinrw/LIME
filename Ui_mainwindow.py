@@ -15,6 +15,10 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1200, 800)
         MainWindow.setMinimumSize(QtCore.QSize(1200, 800))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("data/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
+        MainWindow.setIconSize(QtCore.QSize(18, 18))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -126,7 +130,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "图像增强系统"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "低光照图像增强系统"))
         self.groupbox.setTitle(_translate("MainWindow", "原始图片/光照图/增强后图片"))
         self.label.setText(_translate("MainWindow", "平滑度"))
         self.label_2.setText(_translate("MainWindow", "亮度"))

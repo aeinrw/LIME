@@ -26,6 +26,7 @@ If you think this is useful and interesting, please give me a **star**!😁
 		<td><img src="data/R10.bmp" alt="1" width="300px"/></td>
 	</tr>
 </table>
+
 ---
 
 <img src="data/mainwindow.jpg">
