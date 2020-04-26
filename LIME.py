@@ -2,7 +2,7 @@ import numpy as np
 import scipy as sp
 from scipy.fft import fft, ifft
 from numpy.linalg import norm
-from skimage import io, exposure, filters, img_as_ubyte, img_as_float
+from skimage import io, exposure, img_as_ubyte, img_as_float
 from PyQt5.QtCore import QObject, pyqtSignal
 
 
@@ -11,7 +11,7 @@ class LIME(QObject):
     setMaximumSignal = pyqtSignal(float)
     setValueSignal = pyqtSignal(int)
 
-    def __init__(self, srcPath, alpha=0.1, rho=2, gamma=0.7):
+    def __init__(self, srcPath, alpha=1, gamma=0.7, rho=2):
         super(LIME, self).__init__()
         self.L = img_as_float(io.imread(srcPath))
         self.row = self.L.shape[0]
@@ -123,7 +123,7 @@ class LIME(QObject):
         self.T = T ** self.gamma
         return self.T
 
-    def enhance(self, beta=0.9):
+    def enhance(self):
         self.R = np.zeros(self.L.shape)
         for i in range(3):
             self.R[:, :, i] = self.L[:, :, i] / self.T

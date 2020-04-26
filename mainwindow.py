@@ -29,11 +29,11 @@ class WorkThread(QThread):
 
     finishSignal = pyqtSignal(np.ndarray, np.ndarray)
 
-    def __init__(self, imgPath, progressBar):
+    def __init__(self, imgPath, progressBar, alpha, gamma):
         super(WorkThread, self).__init__()
 
         from LIME import LIME
-        self.lime = LIME(imgPath)
+        self.lime = LIME(imgPath, alpha, gamma)
         self.lime.setMaximumSignal.connect(progressBar.setMaximum)
         self.lime.setValueSignal.connect(progressBar.setValue)
 
@@ -60,8 +60,9 @@ class Window(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_loadBtn_clicked(self):
-        self.imgPath = "./data/7.bmp"
-        #self.imgPath = QFileDialog.getOpenFileName(self, "请选择图片", "./data", "All Files (*)")[0]
+        #self.imgPath = "./data/7.bmp"
+        self.imgPath = QFileDialog.getOpenFileName(
+            self, "请选择图片", "./data", "All Files (*)")[0]
 
         if self.imgPath != '':
             originImg = io.imread(self.imgPath)
@@ -77,19 +78,25 @@ class Window(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_enhanceBtn_clicked(self):
         self.progressBar.setVisible(True)
-        self.workThread = WorkThread(self.imgPath, self.progressBar)
+        self.smoothnessSlider.setEnabled(False)
+        self.brightnessSlider.setEnabled(False)
+        alpha = (401-self.smoothnessSlider.value()) / 100
+        gamma = self.brightnessSlider.value() / 100
+        self.workThread = WorkThread(
+            self.imgPath, self.progressBar, alpha, gamma)
         self.workThread.start()
         self.workThread.finishSignal.connect(self.on_workThread_finishSignal)
 
     def on_workThread_finishSignal(self, T, R):
         self.progressBar.setVisible(False)
+        self.smoothnessSlider.setEnabled(True)
+        self.brightnessSlider.setEnabled(True)
         self.T = T
         self.R = R
         self.statusBar.showMessage("当前图片路径: " + self.imgPath + "   图像增强成功")
         self.imgFigure.T_axes.imshow(self.T, cmap=plt.get_cmap('OrRd_r'))
         self.imgFigure.R_axes.imshow(self.R)
         self.imgFigure.draw()
-        self.enhanceBtn.setEnabled(False)
         self.saveBtn.setEnabled(True)
 
     @pyqtSlot()
