@@ -1,8 +1,9 @@
 import numpy as np
-import scipy as sp
 from scipy.fft import fft, ifft
 from numpy.linalg import norm
-from skimage import io, exposure, img_as_ubyte, img_as_float
+from skimage import img_as_ubyte, img_as_float
+from skimage.exposure import rescale_intensity
+
 from PyQt5.QtCore import QObject, pyqtSignal
 
 
@@ -11,9 +12,9 @@ class LIME(QObject):
     setMaximumSignal = pyqtSignal(float)
     setValueSignal = pyqtSignal(int)
 
-    def __init__(self, srcPath, alpha=1, gamma=0.7, rho=2):
+    def __init__(self, img, alpha=1, gamma=0.7, rho=2):
         super(LIME, self).__init__()
-        self.L = img_as_float(io.imread(srcPath))
+        self.L = img_as_float(img)
         self.row = self.L.shape[0]
         self.col = self.L.shape[1]
 
@@ -64,7 +65,7 @@ class LIME(QObject):
         denominator = fft(self.vecDD * u) + 2
         T = ifft(numerator / denominator)
         T = np.real(reshape(T))
-        return exposure.rescale_intensity(T, (0, 1), (0.0001, 1))
+        return rescale_intensity(T, (0, 1), (0.0001, 1))
 
     def __derivative(self, matrix):
         v = self.dv @ matrix
@@ -127,6 +128,6 @@ class LIME(QObject):
         self.R = np.zeros(self.L.shape)
         for i in range(3):
             self.R[:, :, i] = self.L[:, :, i] / self.T
-        self.R = exposure.rescale_intensity(self.R, (0, 1))
+        self.R = rescale_intensity(self.R, (0, 1))
         self.R = img_as_ubyte(self.R)
         return self.R

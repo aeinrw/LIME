@@ -1,5 +1,5 @@
 from Ui_about import Ui_Form
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget
 
 
 class AboutWindow(QWidget, Ui_Form):
@@ -10,6 +10,7 @@ class AboutWindow(QWidget, Ui_Form):
 
 if __name__ == '__main__':
     import sys
+    from PyQt5.QtWidgets import QApplication
     app = QApplication(sys.argv)
     window = AboutWindow()
     window.show()

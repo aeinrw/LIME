@@ -1,13 +1,13 @@
-import matplotlib.pyplot as plt
+from matplotlib.pyplot import imread, imsave, get_cmap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-import numpy as np
+
+from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QHBoxLayout, QProgressBar, QFileDialog, QMessageBox, QMainWindow
+
+from numpy import ndarray
 from Ui_mainwindow import Ui_MainWindow
 from about import AboutWindow
-from skimage import io
 
 
 class ImgFigure(FigureCanvas):
@@ -27,13 +27,14 @@ class ImgFigure(FigureCanvas):
 
 class WorkThread(QThread):
 
-    finishSignal = pyqtSignal(np.ndarray, np.ndarray)
+    finishSignal = pyqtSignal(ndarray, ndarray)
 
     def __init__(self, imgPath, progressBar, alpha, gamma):
         super(WorkThread, self).__init__()
 
         from LIME import LIME
-        self.lime = LIME(imgPath, alpha, gamma)
+        img = imread(imgPath)
+        self.lime = LIME(img, alpha, gamma)
         self.lime.setMaximumSignal.connect(progressBar.setMaximum)
         self.lime.setValueSignal.connect(progressBar.setValue)
 
@@ -65,7 +66,7 @@ class Window(QMainWindow, Ui_MainWindow):
             self, "请选择图片", "./data", "All Files (*)")[0]
 
         if self.imgPath != '':
-            originImg = io.imread(self.imgPath)
+            originImg = imread(self.imgPath)
             self.imgFigure.L_axes.imshow(originImg)
             self.imgFigure.draw()
             self.statusBar.showMessage("当前图片路径: " + self.imgPath)
@@ -74,6 +75,8 @@ class Window(QMainWindow, Ui_MainWindow):
 
             self.enhanceBtn.setEnabled(True)
             self.saveBtn.setEnabled(False)
+        else:
+            QMessageBox.warning(self, "提示", "请重新选择图片")
 
     @pyqtSlot()
     def on_enhanceBtn_clicked(self):
@@ -94,7 +97,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.T = T
         self.R = R
         self.statusBar.showMessage("当前图片路径: " + self.imgPath + "   图像增强成功")
-        self.imgFigure.T_axes.imshow(self.T, cmap=plt.get_cmap('OrRd_r'))
+        self.imgFigure.T_axes.imshow(self.T, cmap=get_cmap('OrRd_r'))
         self.imgFigure.R_axes.imshow(self.R)
 
         self.progressBar.setValue(self.progressBar.maximum())
@@ -108,7 +111,10 @@ class Window(QMainWindow, Ui_MainWindow):
         savePath = QFileDialog.getSaveFileName(
             self, "请选择保存位置", "./data", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
         if savePath != '':
-            io.imsave(savePath, self.R)
+            imsave(savePath, self.R)
+            QMessageBox.about(self, "提示", "保存成功")
+        else:
+            QMessageBox.warning(self, "提示", "请重新选择保存位置")
 
     @pyqtSlot()
     def on_aboutAct_triggered(self):
@@ -118,6 +124,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     import sys
+    from PyQt5.QtWidgets import QApplication
     app = QApplication(sys.argv)
     window = Window()
     window.show()
