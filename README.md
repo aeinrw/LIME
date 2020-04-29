@@ -14,21 +14,21 @@ If you think this is useful and interesting, please give me a **star**!😁
 
 <table>
 	<tr>
-    	<td><img src="data/1.bmp" alt="1" width="300px"/></td>
-    	<td><img src="data/R1.bmp" alt="1" width="300px"/></td>
+    		<td><img src="data/1.bmp" alt="L1" width="300px"></td>
+    		<td><img src="data/R1.bmp" alt="R1" width="300px"></td>
 	</tr>
 	<tr>
-		<td><img src="data/7.bmp" alt="1" width="300px"/></td>
-		<td><img src="data/R7.bmp" alt="1" width="300px"/></td>
+		<td><img src="data/7.bmp" alt="L2" width="300px"></td>
+		<td><img src="data/R7.bmp" alt="R2" width="300px"></td>
 	</tr>
 	<tr>
-		<td><img src="data/10.bmp" alt="1" width="300px"/></td>
-		<td><img src="data/R10.bmp" alt="1" width="300px"/></td>
+		<td><img src="data/10.bmp" alt="L3" width="300px"></td>
+		<td><img src="data/R10.bmp" alt="R3" width="300px"></td>
+	</tr>
+	<tr>
+		<td colspan="2"><img src="data/mainwindow.png" alt="应用截图" width="630px"></td>
 	</tr>
 </table>
----
-
-<img src="data/mainwindow.png">
 
 ## Related Publications
 
