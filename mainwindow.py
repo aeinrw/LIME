@@ -1,4 +1,5 @@
 from matplotlib.pyplot import imread, imsave, get_cmap
+from skimage import restoration
 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QHBoxLayout, QProgressBar, QFileDialog, QMessageBox, QMainWindow, qApp
@@ -43,16 +44,16 @@ class Window(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_openAct_triggered(self):
-        imgPath = "./data/7.bmp"
-        # imgPath = QFileDialog.getOpenFileName(
-        #     self, "请选择图片", "./data", "All Files (*)")[0]
+        # imgPath = "./data/13.jpg"
+        imgPath = QFileDialog.getOpenFileName(
+            self, "请选择图片", "./data", "All Files (*)")[0]
         self.openImage(imgPath)
 
     def openImage(self, imgPath):
         self.imgPath = imgPath.strip()
         if imgPath != '':
-            originImg = imread(self.imgPath)
-            self.originImgFigure.axes.imshow(originImg)
+            self.originImg = imread(self.imgPath)
+            self.originImgFigure.axes.imshow(self.originImg)
             self.originImgFigure.draw()
             self.statusBar.showMessage("当前图片路径: " + self.imgPath)
 
@@ -118,8 +119,14 @@ class Window(QMainWindow, Ui_MainWindow):
     def on_quitAct_triggered(self):
         qApp.quit()
 
+    @pyqtSlot()
+    def on_denoiseAct_triggered(self):
+        self.R = restoration.denoise_tv_bregman(self.R, 3)
+        self.enhancedImgFigure.axes.imshow(self.R)
+        self.enhancedImgFigure.draw()
+        QMessageBox.about(self, "提示", "去噪成功")
 
-# -------------其他界面-------------
+        # -------------其他界面-------------
 
     @pyqtSlot()
     def on_aboutAct_triggered(self):

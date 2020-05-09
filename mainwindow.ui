@@ -209,20 +209,10 @@
     <property name="title">
      <string>增强</string>
     </property>
-    <widget class="QMenu" name="menu_6">
-     <property name="title">
-      <string>降噪</string>
-     </property>
-     <addaction name="action_1"/>
-     <addaction name="action_21"/>
-    </widget>
     <addaction name="enhanceAct"/>
     <addaction name="illuMapAct"/>
     <addaction name="separator"/>
-    <addaction name="histAct"/>
-    <addaction name="gammaAct"/>
-    <addaction name="separator"/>
-    <addaction name="menu_6"/>
+    <addaction name="denoiseAct"/>
    </widget>
    <widget class="QMenu" name="menu_8">
     <property name="title">
@@ -316,12 +306,12 @@
     <string>显示光照图</string>
    </property>
   </action>
-  <action name="action_1">
+  <action name="denoiseAct">
    <property name="text">
-    <string>降噪1</string>
+    <string>降噪</string>
    </property>
   </action>
-  <action name="action_21">
+  <action name="denoiseAct2">
    <property name="text">
     <string>降噪2</string>
    </property>
@@ -349,16 +339,6 @@
   <action name="action_2">
    <property name="text">
     <string>保存光照图</string>
-   </property>
-  </action>
-  <action name="histAct">
-   <property name="text">
-    <string>直方图均衡</string>
-   </property>
-  </action>
-  <action name="gammaAct">
-   <property name="text">
-    <string>Gamma变换</string>
    </property>
   </action>
  </widget>
