@@ -72,6 +72,10 @@
      <property name="title">
       <string>最近打开</string>
      </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>resource/image/1210763.png</normaloff>resource/image/1210763.png</iconset>
+     </property>
     </widget>
     <addaction name="openAct"/>
     <addaction name="recentOpenMenu"/>
@@ -115,7 +119,6 @@
     <addaction name="enhanceAct"/>
     <addaction name="illuMapAct"/>
     <addaction name="separator"/>
-    <addaction name="denoiseAct"/>
    </widget>
    <widget class="QMenu" name="menu_8">
     <property name="title">
@@ -132,6 +135,9 @@
    <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="minimumSize">
     <size>
      <width>0</width>
@@ -158,6 +164,7 @@
    </attribute>
    <addaction name="openAct"/>
    <addaction name="enhanceAct"/>
+   <addaction name="denoiseAct"/>
    <addaction name="clearAct"/>
    <addaction name="saveAsAct"/>
    <addaction name="settingAct"/>
@@ -187,6 +194,10 @@
    </property>
   </action>
   <action name="aboutAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/icon.png</normaloff>resource/image/icon.png</iconset>
+   </property>
    <property name="text">
     <string>关于</string>
    </property>
@@ -227,6 +238,9 @@
    <property name="checkable">
     <bool>false</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>resource/image/enhence.png</normaloff>resource/image/enhence.png</iconset>
@@ -244,6 +258,9 @@
    </property>
   </action>
   <action name="saveAct">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>resource/image/save.png</normaloff>resource/image/save.png</iconset>
@@ -258,6 +275,9 @@
    </property>
   </action>
   <action name="printAct">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>打印</string>
    </property>
@@ -287,6 +307,9 @@
    </property>
   </action>
   <action name="illuMapAct">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>resource/image/1211052.png</normaloff>resource/image/1211052.png</iconset>
@@ -296,6 +319,9 @@
    </property>
   </action>
   <action name="denoiseAct">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>resource/image/denoise.png</normaloff>resource/image/denoise.png</iconset>
@@ -324,11 +350,18 @@
    </property>
   </action>
   <action name="thankAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/github.png</normaloff>resource/image/github.png</iconset>
+   </property>
    <property name="text">
     <string>致谢</string>
    </property>
   </action>
   <action name="saveAsAct">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>resource/image/save.png</normaloff>resource/image/save.png</iconset>
@@ -343,6 +376,9 @@
    </property>
   </action>
   <action name="saveIlluMapAct">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>resource/image/save.png</normaloff>resource/image/save.png</iconset>

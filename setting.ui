@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>参数设置</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resource/image/setting.png</normaloff>resource/image/setting.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="groupBox">

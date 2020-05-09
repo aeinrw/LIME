@@ -13,13 +13,41 @@
   <property name="windowTitle">
    <string>光照图</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resource/image/denoise.png</normaloff>resource/image/denoise.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string/>
      </property>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="saveIlluMapBtn">
+       <property name="text">
+        <string>保存光照图</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

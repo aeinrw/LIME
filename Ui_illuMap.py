@@ -14,12 +14,23 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(274, 317)
-        self.horizontalLayout = QtWidgets.QHBoxLayout(Form)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("resource/image/denoise.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Form.setWindowIcon(icon)
+        self.verticalLayout = QtWidgets.QVBoxLayout(Form)
+        self.verticalLayout.setObjectName("verticalLayout")
         self.groupBox = QtWidgets.QGroupBox(Form)
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
-        self.horizontalLayout.addWidget(self.groupBox)
+        self.verticalLayout.addWidget(self.groupBox)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.saveIlluMapBtn = QtWidgets.QPushButton(Form)
+        self.saveIlluMapBtn.setObjectName("saveIlluMapBtn")
+        self.horizontalLayout.addWidget(self.saveIlluMapBtn)
+        self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -27,3 +38,4 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "光照图"))
+        self.saveIlluMapBtn.setText(_translate("Form", "保存光照图"))
