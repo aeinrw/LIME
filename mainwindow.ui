@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>data/icon.png</normaloff>data/icon.png</iconset>
+    <normaloff>resource/image/icon.png</normaloff>resource/image/icon.png</iconset>
   </property>
   <property name="iconSize">
    <size>
@@ -47,103 +47,6 @@
        <widget class="QGroupBox" name="enhancedBox">
         <property name="title">
          <string>增强后图片</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>平滑度</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="smoothnessSlider">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>400</number>
-             </property>
-             <property name="value">
-              <number>301</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>亮度</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="brightnessSlider">
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="singleStep">
-              <number>1</number>
-             </property>
-             <property name="pageStep">
-              <number>10</number>
-             </property>
-             <property name="value">
-              <number>70</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>&lt;a href=&quot;https://github.com/aeinrw/LIME&quot;&gt;&lt;img src=&quot;data/github.png&quot;&gt;&lt;/a&gt;</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::RichText</enum>
-        </property>
-        <property name="openExternalLinks">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -175,7 +78,7 @@
     <addaction name="separator"/>
     <addaction name="saveAct"/>
     <addaction name="saveAsAct"/>
-    <addaction name="action_2"/>
+    <addaction name="saveIlluMapAct"/>
     <addaction name="separator"/>
     <addaction name="printAct"/>
     <addaction name="separator"/>
@@ -187,7 +90,7 @@
     <property name="title">
      <string>设置</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="settingAct"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -218,8 +121,8 @@
     <property name="title">
      <string>视图</string>
     </property>
-    <addaction name="action_22"/>
-    <addaction name="action_23"/>
+    <addaction name="showToolBarAct"/>
+    <addaction name="showProgressBarAct"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_5"/>
@@ -229,11 +132,26 @@
    <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
    <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
+    <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
@@ -241,11 +159,31 @@
    <addaction name="openAct"/>
    <addaction name="enhanceAct"/>
    <addaction name="clearAct"/>
-   <addaction name="saveAct"/>
+   <addaction name="saveAsAct"/>
+   <addaction name="settingAct"/>
   </widget>
   <action name="openAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/open.png</normaloff>resource/image/open.png</iconset>
+   </property>
    <property name="text">
     <string>打开</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+     <stylestrategy>PreferDefault</stylestrategy>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="aboutAct">
@@ -253,32 +191,70 @@
     <string>关于</string>
    </property>
   </action>
-  <action name="action">
+  <action name="settingAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/setting.png</normaloff>resource/image/setting.png</iconset>
+   </property>
    <property name="text">
-    <string>参数调整</string>
+    <string>参数</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
   </action>
   <action name="undoAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/undo.png</normaloff>resource/image/undo.png</iconset>
+   </property>
    <property name="text">
     <string>撤销</string>
    </property>
   </action>
   <action name="redoAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/redo.png</normaloff>resource/image/redo.png</iconset>
+   </property>
    <property name="text">
     <string>重做</string>
    </property>
   </action>
   <action name="enhanceAct">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/enhence.png</normaloff>resource/image/enhence.png</iconset>
+   </property>
    <property name="text">
     <string>增强</string>
    </property>
    <property name="toolTip">
     <string>低光照增强</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
   </action>
   <action name="saveAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/save.png</normaloff>resource/image/save.png</iconset>
+   </property>
    <property name="text">
     <string>保存</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
   </action>
   <action name="printAct">
@@ -287,8 +263,17 @@
    </property>
   </action>
   <action name="clearAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/clear.png</normaloff>resource/image/clear.png</iconset>
+   </property>
    <property name="text">
     <string>清空</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
   </action>
   <action name="quitAct">
@@ -298,30 +283,42 @@
   </action>
   <action name="copyAct">
    <property name="text">
-    <string>复制图片</string>
+    <string>复制</string>
    </property>
   </action>
   <action name="illuMapAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/1211052.png</normaloff>resource/image/1211052.png</iconset>
+   </property>
    <property name="text">
-    <string>显示光照图</string>
+    <string>光照图</string>
    </property>
   </action>
   <action name="denoiseAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/denoise.png</normaloff>resource/image/denoise.png</iconset>
+   </property>
    <property name="text">
     <string>降噪</string>
    </property>
   </action>
-  <action name="denoiseAct2">
+  <action name="showToolBarAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>降噪2</string>
+    <string>工具栏</string>
+   </property>
+   <property name="toolTip">
+    <string>工具栏</string>
    </property>
   </action>
-  <action name="action_22">
-   <property name="text">
-    <string>菜单栏</string>
+  <action name="showProgressBarAct">
+   <property name="checkable">
+    <bool>true</bool>
    </property>
-  </action>
-  <action name="action_23">
    <property name="text">
     <string>进度条</string>
    </property>
@@ -332,18 +329,48 @@
    </property>
   </action>
   <action name="saveAsAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/save.png</normaloff>resource/image/save.png</iconset>
+   </property>
    <property name="text">
-    <string>保存为</string>
+    <string>另存为</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
   </action>
-  <action name="action_2">
+  <action name="saveIlluMapAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/save.png</normaloff>resource/image/save.png</iconset>
+   </property>
    <property name="text">
     <string>保存光照图</string>
    </property>
   </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>showToolBarAct</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>toolBar</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>349</x>
+     <y>36</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>loadImg()</slot>
   <slot>enhanceImg()</slot>

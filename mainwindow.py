@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QProgressBar, QFileDialog, QMessageBox,
 from Ui_mainwindow import Ui_MainWindow
 from about import AboutWindow
 from illuMap import IlluMapWindow
+from setting import SettingWindow
 from utli import ImgFigure, WorkThread
 
 
@@ -28,8 +29,21 @@ class Window(QMainWindow, Ui_MainWindow):
         self.statusBar.showMessage("请选择文件")
         self.progressBar = QProgressBar()
         self.statusBar.addPermanentWidget(self.progressBar)
-        self.progressBar.setVisible(False)
+        # self.progressBar.setVisible(False)
+
+        self.showProgressBarAct.triggered['bool'].connect(
+            self.progressBar.setVisible)
+
+        self.showToolBarAct.setChecked(True)
+        self.showProgressBarAct.setChecked(True)
         # -------setupUi------------
+
+        self.alpha = 1
+        self.gamma = 0.7
+        self.weigh = 1
+
+        self.settingWindow = SettingWindow()
+        self.settingWindow.changeParameterSignal.connect(self.changeParameter)
 
         with open("./resource/config/.history", 'r') as fp:
             self.action1 = self.recentOpenMenu.addAction(fp.readline())
@@ -57,6 +71,8 @@ class Window(QMainWindow, Ui_MainWindow):
             self.originImgFigure.draw()
             self.statusBar.showMessage("当前图片路径: " + self.imgPath)
 
+            self.historyFile()
+
             self.progressBar.setValue(0)
 
             self.enhanceAct.setEnabled(True)
@@ -64,22 +80,30 @@ class Window(QMainWindow, Ui_MainWindow):
         else:
             QMessageBox.warning(self, "提示", "请重新选择图片")
 
+    def historyFile(self):
+        with open("./resource/config/.history", 'r+') as fp:
+            history = fp.readlines()
+            history = self.imgPath + '\n' + history[0] + history[1]
+            fp.seek(0, 0)
+            fp.truncate()
+            fp.write(history)
+            print("helloworld")
+
+    def changeParameter(self, alpha, gamma, weigh):
+        self.alpha = alpha
+        self.gamma = gamma
+        self.weigh = weigh
+
     @pyqtSlot()
     def on_enhanceAct_triggered(self):
         self.progressBar.setValue(0)
-        self.progressBar.setVisible(True)
-        self.smoothnessSlider.setEnabled(False)
-        self.brightnessSlider.setEnabled(False)
-        alpha = (401-self.smoothnessSlider.value()) / 100
-        gamma = self.brightnessSlider.value() / 100
+        # self.progressBar.setVisible(True)
         self.workThread = WorkThread(
-            self.imgPath, self.progressBar, alpha, gamma)
+            self.imgPath, self.progressBar, self.alpha, self.gamma)
         self.workThread.start()
         self.workThread.finishSignal.connect(self.on_workThread_finishSignal)
 
     def on_workThread_finishSignal(self, T, R):
-        self.smoothnessSlider.setEnabled(True)
-        self.brightnessSlider.setEnabled(True)
         self.T = T
         self.R = R
         self.statusBar.showMessage("当前图片路径: " + self.imgPath + "   图像增强成功")
@@ -87,7 +111,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.enhancedImgFigure.axes.imshow(self.R)
 
         self.progressBar.setValue(self.progressBar.maximum())
-        self.progressBar.setVisible(False)
+        # self.progressBar.setVisible(False)
 
         self.enhancedImgFigure.draw()
         self.saveAct.setEnabled(True)
@@ -121,7 +145,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_denoiseAct_triggered(self):
-        self.R = restoration.denoise_tv_bregman(self.R, 3)
+        self.R = restoration.denoise_tv_bregman(self.R, self.weigh)
         self.enhancedImgFigure.axes.imshow(self.R)
         self.enhancedImgFigure.draw()
         QMessageBox.about(self, "提示", "去噪成功")
@@ -139,6 +163,14 @@ class Window(QMainWindow, Ui_MainWindow):
         self.illuMapWindow.figure.axes.imshow(self.T, cmap=get_cmap('OrRd_r'))
         self.illuMapWindow.figure.draw()
         self.illuMapWindow.show()
+
+    @pyqtSlot()
+    def on_settingAct_triggered(self):
+        self.settingWindow.smoothnessSlider.setValue(
+            int(401 - 100 * self.alpha))
+        self.settingWindow.brightnessSlider.setValue(int(100 * self.gamma))
+        self.settingWindow.denosieSlider.setValue(int(100*self.weigh))
+        self.settingWindow.show()
 
 
 if __name__ == '__main__':
