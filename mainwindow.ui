@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1400</width>
-    <height>800</height>
+    <width>700</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1400</width>
-    <height>700</height>
+    <width>700</width>
+    <height>400</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -32,14 +32,21 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QGroupBox" name="groupbox">
+       <widget class="QGroupBox" name="originBox">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="title">
-         <string>原始图片/光照图/增强后图片</string>
+         <string>原始图片</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="enhancedBox">
+        <property name="title">
+         <string>增强后图片</string>
         </property>
        </widget>
       </item>
@@ -191,7 +198,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1400</width>
+     <width>700</width>
      <height>18</height>
     </rect>
    </property>
@@ -199,12 +206,26 @@
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="loadAct"/>
+    <widget class="QMenu" name="recentOpenMenu">
+     <property name="title">
+      <string>最近打开</string>
+     </property>
+    </widget>
+    <addaction name="openAct"/>
+    <addaction name="recentOpenMenu"/>
+    <addaction name="separator"/>
     <addaction name="saveAct"/>
+    <addaction name="saveAsAct"/>
+    <addaction name="separator"/>
+    <addaction name="printAct"/>
+    <addaction name="separator"/>
+    <addaction name="clearAct"/>
+    <addaction name="separator"/>
+    <addaction name="quitAct"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>调整</string>
+     <string>设置</string>
     </property>
     <addaction name="action"/>
    </widget>
@@ -213,24 +234,47 @@
      <string>帮助</string>
     </property>
     <addaction name="aboutAct"/>
+    <addaction name="thinkAct"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="undoAct"/>
+    <addaction name="redoAct"/>
+    <addaction name="separator"/>
+    <addaction name="copyAct"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
-     <string>工具</string>
+     <string>增强</string>
     </property>
-    <addaction name="action_2"/>
+    <widget class="QMenu" name="menu_6">
+     <property name="title">
+      <string>降噪</string>
+     </property>
+     <addaction name="action_1"/>
+     <addaction name="action_21"/>
+    </widget>
+    <addaction name="enhanceAct"/>
+    <addaction name="illuMapAct"/>
+    <addaction name="menu_6"/>
+   </widget>
+   <widget class="QMenu" name="menu_8">
+    <property name="title">
+     <string>视图</string>
+    </property>
+    <addaction name="action_22"/>
+    <addaction name="action_23"/>
    </widget>
    <addaction name="menu"/>
-   <addaction name="menu_2"/>
+   <addaction name="menu_5"/>
    <addaction name="menu_4"/>
+   <addaction name="menu_8"/>
+   <addaction name="menu_2"/>
    <addaction name="menu_3"/>
   </widget>
-  <action name="saveAct">
-   <property name="text">
-    <string>保存</string>
-   </property>
-  </action>
-  <action name="loadAct">
+  <action name="openAct">
    <property name="text">
     <string>打开</string>
    </property>
@@ -242,50 +286,102 @@
   </action>
   <action name="action">
    <property name="text">
-    <string>待完成</string>
+    <string>参数调整</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="undoAct">
    <property name="text">
-    <string>待完成</string>
+    <string>撤销</string>
+   </property>
+  </action>
+  <action name="redoAct">
+   <property name="text">
+    <string>重做</string>
+   </property>
+  </action>
+  <action name="enhanceAct">
+   <property name="text">
+    <string>图像增强</string>
+   </property>
+  </action>
+  <action name="saveAct">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="printAct">
+   <property name="text">
+    <string>打印</string>
+   </property>
+  </action>
+  <action name="clearAct">
+   <property name="text">
+    <string>清空</string>
+   </property>
+  </action>
+  <action name="quitAct">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="copyAct">
+   <property name="text">
+    <string>复制图片</string>
+   </property>
+  </action>
+  <action name="illuMapAct">
+   <property name="text">
+    <string>光照图</string>
+   </property>
+  </action>
+  <action name="action_1">
+   <property name="text">
+    <string>降噪1</string>
+   </property>
+  </action>
+  <action name="action_21">
+   <property name="text">
+    <string>降噪2</string>
+   </property>
+  </action>
+  <action name="action_bmp">
+   <property name="text">
+    <string>.bmp</string>
+   </property>
+  </action>
+  <action name="action_jpg">
+   <property name="text">
+    <string>.jpg</string>
+   </property>
+  </action>
+  <action name="action_png">
+   <property name="text">
+    <string>.png</string>
+   </property>
+  </action>
+  <action name="action_22">
+   <property name="text">
+    <string>菜单栏</string>
+   </property>
+  </action>
+  <action name="action_23">
+   <property name="text">
+    <string>进度条</string>
+   </property>
+  </action>
+  <action name="thinkAct">
+   <property name="text">
+    <string>致谢</string>
+   </property>
+  </action>
+  <action name="saveAsAct">
+   <property name="text">
+    <string>保存为</string>
    </property>
   </action>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>loadAct</sender>
-   <signal>triggered()</signal>
-   <receiver>loadBtn</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>198</x>
-     <y>608</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>saveAct</sender>
-   <signal>triggered()</signal>
-   <receiver>saveBtn</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1108</x>
-     <y>608</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>loadImg()</slot>
   <slot>enhanceImg()</slot>

@@ -3,7 +3,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QHBoxLayout, QProgressBar, QFileDialog, QMessageBox, QMainWindow
+from PyQt5.QtWidgets import QHBoxLayout, QProgressBar, QFileDialog, QMessageBox, QMainWindow, QAction
 
 from numpy import ndarray
 from Ui_mainwindow import Ui_MainWindow
@@ -14,15 +14,9 @@ class ImgFigure(FigureCanvas):
     def __init__(self, dpi=100):
         self.fig = Figure(dpi=dpi)
         super(ImgFigure, self).__init__(self.fig)
-        self.L_axes = self.fig.add_subplot(131)
-        self.T_axes = self.fig.add_subplot(132)
-        self.R_axes = self.fig.add_subplot(133)
-        self.L_axes.get_yaxis().set_visible(False)
-        self.L_axes.get_xaxis().set_visible(False)
-        self.R_axes.get_yaxis().set_visible(False)
-        self.R_axes.get_xaxis().set_visible(False)
-        self.T_axes.get_yaxis().set_visible(False)
-        self.T_axes.get_xaxis().set_visible(False)
+        self.axes = self.fig.add_subplot(111)
+        self.axes.get_yaxis().set_visible(False)
+        self.axes.get_xaxis().set_visible(False)
 
 
 class WorkThread(QThread):
@@ -49,26 +43,45 @@ class Window(QMainWindow, Ui_MainWindow):
         super(Window, self).__init__()
         self.setupUi(self)
 
-        self.imgFigure = ImgFigure()
+        # -------setupUi------------
+        self.originImgFigure = ImgFigure()
+        self.enhancedImgFigure = ImgFigure()
 
-        self.layout = QHBoxLayout(self.groupbox)
-        self.layout.addWidget(self.imgFigure)
+        self.originImgLayout = QHBoxLayout(self.originBox)
+        self.enhancedImgLayout = QHBoxLayout(self.enhancedBox)
+        self.originImgLayout.addWidget(self.originImgFigure)
+        self.enhancedImgLayout.addWidget(self.enhancedImgFigure)
 
         self.statusBar.showMessage("请选择文件")
         self.progressBar = QProgressBar()
         self.statusBar.addPermanentWidget(self.progressBar)
         self.progressBar.setVisible(False)
+        # -------setupUi------------
+
+        with open("./resource/config/.history", 'r') as fp:
+            self.action1 = self.recentOpenMenu.addAction(fp.readline())
+            self.action1.triggered.connect(
+                lambda: self.openImage(self.action1.text()))
+            self.action2 = self.recentOpenMenu.addAction(fp.readline())
+            self.action2.triggered.connect(
+                lambda: self.openImage(self.action2.text()))
+            self.action3 = self.recentOpenMenu.addAction(fp.readline())
+            self.action3.triggered.connect(
+                lambda: self.openImage(self.action3.text()))
 
     @pyqtSlot()
-    def on_loadBtn_clicked(self):
-        #self.imgPath = "./data/7.bmp"
-        self.imgPath = QFileDialog.getOpenFileName(
-            self, "请选择图片", "./data", "All Files (*)")[0]
+    def on_openAct_triggered(self):
+        imgPath = "./data/7.bmp"
+        # imgPath = QFileDialog.getOpenFileName(
+        #     self, "请选择图片", "./data", "All Files (*)")[0]
+        self.openImage(imgPath)
 
-        if self.imgPath != '':
+    def openImage(self, imgPath):
+        self.imgPath = imgPath.strip()
+        if imgPath != '':
             originImg = imread(self.imgPath)
-            self.imgFigure.L_axes.imshow(originImg)
-            self.imgFigure.draw()
+            self.originImgFigure.axes.imshow(originImg)
+            self.originImgFigure.draw()
             self.statusBar.showMessage("当前图片路径: " + self.imgPath)
 
             self.progressBar.setValue(0)
@@ -79,7 +92,7 @@ class Window(QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, "提示", "请重新选择图片")
 
     @pyqtSlot()
-    def on_enhanceBtn_clicked(self):
+    def on_enhanceAct_triggered(self):
         self.progressBar.setValue(0)
         self.progressBar.setVisible(True)
         self.smoothnessSlider.setEnabled(False)
@@ -94,20 +107,20 @@ class Window(QMainWindow, Ui_MainWindow):
     def on_workThread_finishSignal(self, T, R):
         self.smoothnessSlider.setEnabled(True)
         self.brightnessSlider.setEnabled(True)
-        self.T = T
+        # self.T = T
         self.R = R
         self.statusBar.showMessage("当前图片路径: " + self.imgPath + "   图像增强成功")
-        self.imgFigure.T_axes.imshow(self.T, cmap=get_cmap('OrRd_r'))
-        self.imgFigure.R_axes.imshow(self.R)
+        # self.imgFigure.T_axes.imshow(self.T, cmap=get_cmap('OrRd_r'))
+        self.enhancedImgFigure.axes.imshow(self.R)
 
         self.progressBar.setValue(self.progressBar.maximum())
         self.progressBar.setVisible(False)
 
-        self.imgFigure.draw()
+        self.enhancedImgFigure.draw()
         self.saveBtn.setEnabled(True)
 
     @pyqtSlot()
-    def on_saveBtn_clicked(self):
+    def on_saveAsAct_triggered(self):
         savePath = QFileDialog.getSaveFileName(
             self, "请选择保存位置", "./data", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
         if savePath != '':
@@ -115,6 +128,19 @@ class Window(QMainWindow, Ui_MainWindow):
             QMessageBox.about(self, "提示", "保存成功")
         else:
             QMessageBox.warning(self, "提示", "请重新选择保存位置")
+
+    @pyqtSlot()
+    def on_saveAct_triggered(self):
+        savePath = self.imgPath
+        imsave(savePath, self.R)
+        QMessageBox.about(self, "提示", "保存成功")
+
+    @pyqtSlot()
+    def on_clearAct_triggered(self):
+        self.originImgFigure.axes.cla()
+        self.originImgFigure.draw()
+        self.enhancedImgFigure.axes.cla()
+        self.enhancedImgFigure.draw()
 
     @pyqtSlot()
     def on_aboutAct_triggered(self):
