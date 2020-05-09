@@ -1,41 +1,13 @@
 from matplotlib.pyplot import imread, imsave, get_cmap
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QHBoxLayout, QProgressBar, QFileDialog, QMessageBox, QMainWindow, QAction
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QHBoxLayout, QProgressBar, QFileDialog, QMessageBox, QMainWindow, qApp
 
-from numpy import ndarray
+
 from Ui_mainwindow import Ui_MainWindow
 from about import AboutWindow
-
-
-class ImgFigure(FigureCanvas):
-    def __init__(self, dpi=100):
-        self.fig = Figure(dpi=dpi)
-        super(ImgFigure, self).__init__(self.fig)
-        self.axes = self.fig.add_subplot(111)
-        self.axes.get_yaxis().set_visible(False)
-        self.axes.get_xaxis().set_visible(False)
-
-
-class WorkThread(QThread):
-
-    finishSignal = pyqtSignal(ndarray, ndarray)
-
-    def __init__(self, imgPath, progressBar, alpha, gamma):
-        super(WorkThread, self).__init__()
-
-        from LIME import LIME
-        img = imread(imgPath)
-        self.lime = LIME(img, alpha, gamma)
-        self.lime.setMaximumSignal.connect(progressBar.setMaximum)
-        self.lime.setValueSignal.connect(progressBar.setValue)
-
-    def run(self):
-        T = self.lime.optimizeIllumMap()
-        R = self.lime.enhance()
-        self.finishSignal.emit(T, R)
+from illuMap import IlluMapWindow
+from utli import ImgFigure, WorkThread
 
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -86,8 +58,8 @@ class Window(QMainWindow, Ui_MainWindow):
 
             self.progressBar.setValue(0)
 
-            self.enhanceBtn.setEnabled(True)
-            self.saveBtn.setEnabled(False)
+            self.enhanceAct.setEnabled(True)
+            self.saveAct.setEnabled(False)
         else:
             QMessageBox.warning(self, "提示", "请重新选择图片")
 
@@ -107,7 +79,7 @@ class Window(QMainWindow, Ui_MainWindow):
     def on_workThread_finishSignal(self, T, R):
         self.smoothnessSlider.setEnabled(True)
         self.brightnessSlider.setEnabled(True)
-        # self.T = T
+        self.T = T
         self.R = R
         self.statusBar.showMessage("当前图片路径: " + self.imgPath + "   图像增强成功")
         # self.imgFigure.T_axes.imshow(self.T, cmap=get_cmap('OrRd_r'))
@@ -117,7 +89,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.progressBar.setVisible(False)
 
         self.enhancedImgFigure.draw()
-        self.saveBtn.setEnabled(True)
+        self.saveAct.setEnabled(True)
 
     @pyqtSlot()
     def on_saveAsAct_triggered(self):
@@ -143,9 +115,23 @@ class Window(QMainWindow, Ui_MainWindow):
         self.enhancedImgFigure.draw()
 
     @pyqtSlot()
+    def on_quitAct_triggered(self):
+        qApp.quit()
+
+
+# -------------其他界面-------------
+
+    @pyqtSlot()
     def on_aboutAct_triggered(self):
         self.aboutWindow = AboutWindow()
         self.aboutWindow.show()
+
+    @pyqtSlot()
+    def on_illuMapAct_triggered(self):
+        self.illuMapWindow = IlluMapWindow()
+        self.illuMapWindow.figure.axes.imshow(self.T, cmap=get_cmap('OrRd_r'))
+        self.illuMapWindow.figure.draw()
+        self.illuMapWindow.show()
 
 
 if __name__ == '__main__':

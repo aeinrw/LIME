@@ -125,47 +125,6 @@
            </item>
           </layout>
          </item>
-         <item>
-          <widget class="Line" name="line">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <property name="spacing">
-            <number>14</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="loadBtn">
-             <property name="text">
-              <string>图片加载</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="enhanceBtn">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>图片增强</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="saveBtn">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>保存图片</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
         </layout>
        </widget>
       </item>
@@ -216,6 +175,7 @@
     <addaction name="separator"/>
     <addaction name="saveAct"/>
     <addaction name="saveAsAct"/>
+    <addaction name="action_2"/>
     <addaction name="separator"/>
     <addaction name="printAct"/>
     <addaction name="separator"/>
@@ -234,7 +194,7 @@
      <string>帮助</string>
     </property>
     <addaction name="aboutAct"/>
-    <addaction name="thinkAct"/>
+    <addaction name="thankAct"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -258,6 +218,10 @@
     </widget>
     <addaction name="enhanceAct"/>
     <addaction name="illuMapAct"/>
+    <addaction name="separator"/>
+    <addaction name="histAct"/>
+    <addaction name="gammaAct"/>
+    <addaction name="separator"/>
     <addaction name="menu_6"/>
    </widget>
    <widget class="QMenu" name="menu_8">
@@ -273,6 +237,21 @@
    <addaction name="menu_8"/>
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="openAct"/>
+   <addaction name="enhanceAct"/>
+   <addaction name="clearAct"/>
+   <addaction name="saveAct"/>
   </widget>
   <action name="openAct">
    <property name="text">
@@ -301,7 +280,10 @@
   </action>
   <action name="enhanceAct">
    <property name="text">
-    <string>图像增强</string>
+    <string>增强</string>
+   </property>
+   <property name="toolTip">
+    <string>低光照增强</string>
    </property>
   </action>
   <action name="saveAct">
@@ -331,7 +313,7 @@
   </action>
   <action name="illuMapAct">
    <property name="text">
-    <string>光照图</string>
+    <string>显示光照图</string>
    </property>
   </action>
   <action name="action_1">
@@ -344,21 +326,6 @@
     <string>降噪2</string>
    </property>
   </action>
-  <action name="action_bmp">
-   <property name="text">
-    <string>.bmp</string>
-   </property>
-  </action>
-  <action name="action_jpg">
-   <property name="text">
-    <string>.jpg</string>
-   </property>
-  </action>
-  <action name="action_png">
-   <property name="text">
-    <string>.png</string>
-   </property>
-  </action>
   <action name="action_22">
    <property name="text">
     <string>菜单栏</string>
@@ -369,7 +336,7 @@
     <string>进度条</string>
    </property>
   </action>
-  <action name="thinkAct">
+  <action name="thankAct">
    <property name="text">
     <string>致谢</string>
    </property>
@@ -377,6 +344,21 @@
   <action name="saveAsAct">
    <property name="text">
     <string>保存为</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>保存光照图</string>
+   </property>
+  </action>
+  <action name="histAct">
+   <property name="text">
+    <string>直方图均衡</string>
+   </property>
+  </action>
+  <action name="gammaAct">
+   <property name="text">
+    <string>Gamma变换</string>
    </property>
   </action>
  </widget>
