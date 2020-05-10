@@ -74,7 +74,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>resource/image/1210763.png</normaloff>resource/image/1210763.png</iconset>
+       <normaloff>resource/image/file.png</normaloff>resource/image/file.png</iconset>
      </property>
     </widget>
     <addaction name="openAct"/>
@@ -83,8 +83,6 @@
     <addaction name="saveAct"/>
     <addaction name="saveAsAct"/>
     <addaction name="saveIlluMapAct"/>
-    <addaction name="separator"/>
-    <addaction name="printAct"/>
     <addaction name="separator"/>
     <addaction name="clearAct"/>
     <addaction name="separator"/>
@@ -103,15 +101,6 @@
     <addaction name="aboutAct"/>
     <addaction name="thankAct"/>
    </widget>
-   <widget class="QMenu" name="menu_5">
-    <property name="title">
-     <string>编辑</string>
-    </property>
-    <addaction name="undoAct"/>
-    <addaction name="redoAct"/>
-    <addaction name="separator"/>
-    <addaction name="copyAct"/>
-   </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
      <string>增强</string>
@@ -128,7 +117,6 @@
     <addaction name="showProgressBarAct"/>
    </widget>
    <addaction name="menu"/>
-   <addaction name="menu_5"/>
    <addaction name="menu_4"/>
    <addaction name="menu_8"/>
    <addaction name="menu_2"/>
@@ -297,6 +285,10 @@
    </property>
   </action>
   <action name="quitAct">
+   <property name="icon">
+    <iconset>
+     <normaloff>resource/image/quit.png</normaloff>resource/image/quit.png</iconset>
+   </property>
    <property name="text">
     <string>退出</string>
    </property>

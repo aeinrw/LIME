@@ -114,6 +114,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.saveAsAct.setEnabled(True)
         self.saveIlluMapAct.setEnabled(True)
         self.denoiseAct.setEnabled(True)
+        self.illuMapAct.setEnabled(True)
 
     @pyqtSlot()
     def on_saveAsAct_triggered(self):

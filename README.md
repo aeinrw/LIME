@@ -26,7 +26,7 @@ If you think this is useful and interesting, please give me a **star**!😁
 		<td><img src="data/R10.bmp" alt="R3" width="300px"></td>
 	</tr>
 	<tr>
-		<td colspan="2"><img src="data/mainwindow.png" alt="应用截图" width="630px"></td>
+		<td colspan="2"><img src="resource/image/mainwindow.png" alt="应用截图" width="630px"></td>
 	</tr>
 </table>
 
