@@ -45,6 +45,8 @@ class Window(QMainWindow, Ui_MainWindow):
         self.settingWindow = SettingWindow()
         self.settingWindow.changeParameterSignal.connect(self.changeParameter)
 
+        self._illuMapWindowFlag = False
+
         with open("./resource/config/.history", 'r') as fp:
             self.action1 = self.recentOpenMenu.addAction(fp.readline())
             self.action1.triggered.connect(
@@ -161,7 +163,12 @@ class Window(QMainWindow, Ui_MainWindow):
         savePath = QFileDialog.getSaveFileName(
             self, "请选择保存位置", "./data", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
         if savePath != '':
-            imsave(savePath, self.T, cmap=get_cmap('OrRd_r'))
+            if self._illuMapWindowFlag == True:
+                color = self.illuMapWindow.colorComboBox.currentText()
+                color = self.illuMapWindow.colorMap[color]
+                imsave(savePath, self.T, cmap=get_cmap(color))
+            else:
+                imsave(savePath, self.T, cmap=get_cmap('OrRd_r'))
             QMessageBox.about(self, "提示", "保存成功")
         else:
             QMessageBox.warning(self, "提示", "请重新选择保存位置")
@@ -176,11 +183,20 @@ class Window(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_illuMapAct_triggered(self):
         self.illuMapWindow = IlluMapWindow()
+        self._illuMapWindowFlag = True
         self.illuMapWindow.saveIlluMapBtn.clicked.connect(
             self.on_saveIlluMapAct_triggered)
+        self.illuMapWindow.confirmBtn.clicked.connect(
+            self.on_confirmBtn_triggered)
         self.illuMapWindow.figure.axes.imshow(self.T, cmap=get_cmap('OrRd_r'))
         self.illuMapWindow.figure.draw()
         self.illuMapWindow.show()
+
+    def on_confirmBtn_triggered(self):
+        color = self.illuMapWindow.colorComboBox.currentText()
+        color = self.illuMapWindow.colorMap[color]
+        self.illuMapWindow.figure.axes.imshow(self.T, cmap=get_cmap(color))
+        self.illuMapWindow.figure.draw()
 
     @pyqtSlot()
     def on_settingAct_triggered(self):

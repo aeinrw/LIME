@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
-    <height>317</height>
+    <width>500</width>
+    <height>600</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>600</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>光照图</string>
@@ -27,6 +33,54 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>光照图颜色调整</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="colorComboBox">
+       <item>
+        <property name="text">
+         <string>红黄</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>灰色</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>红粉</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>蓝绿</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>黄绿蓝</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>粉蓝</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="confirmBtn">
+       <property name="text">
+        <string>确认</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
