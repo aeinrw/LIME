@@ -1,5 +1,4 @@
 __pycache__/
 test/
 .vscode/
-resource/config
-
+resource/config/
