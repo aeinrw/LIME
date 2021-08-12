@@ -62,7 +62,7 @@ class Window(QMainWindow, Ui_MainWindow):
     def on_openAct_triggered(self):
         # imgPath = "./data/13.jpg"
         imgPath = QFileDialog.getOpenFileName(
-            self, "请选择图片", "./data", "All Files (*)")[0]
+            self, "请选择图片", "/", "All Files (*)")[0]
         self.openImage(imgPath)
 
     def openImage(self, imgPath):
@@ -121,7 +121,7 @@ class Window(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_saveAsAct_triggered(self):
         savePath = QFileDialog.getSaveFileName(
-            self, "请选择保存位置", "./data", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
+            self, "请选择保存位置", "/", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
         if savePath != '':
             imsave(savePath, self.R)
             QMessageBox.about(self, "提示", "保存成功")
@@ -161,7 +161,7 @@ class Window(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_saveIlluMapAct_triggered(self):
         savePath = QFileDialog.getSaveFileName(
-            self, "请选择保存位置", "./data", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
+            self, "请选择保存位置", "/", "BMP格式 (*.bmp);;JPG格式 (*.jpg)")[0]
         if savePath != '':
             if self._illuMapWindowFlag == True:
                 color = self.illuMapWindow.colorComboBox.currentText()
